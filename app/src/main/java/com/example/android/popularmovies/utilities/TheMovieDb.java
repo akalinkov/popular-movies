@@ -2,6 +2,9 @@ package com.example.android.popularmovies.utilities;
 
 import android.net.Uri;
 
+import com.example.android.popularmovies.model.PopularMoviesResponse;
+import com.google.gson.Gson;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -15,10 +18,11 @@ public class TheMovieDb {
     private static final String API_KEY_PARAM = "api_key";
     private static final String API_KEY = "";
 
-    public static String getPopularMovies() {
+    public static PopularMoviesResponse getPopularMovies() {
         URL popularMoviesUrl = buildMoviesUrl();
         try {
-            return sendHttpRequest(popularMoviesUrl);
+            String json = sendHttpRequest(popularMoviesUrl);
+            return new Gson().fromJson(json, PopularMoviesResponse.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
