@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Popular Movies</string>
+    <string name="release_date_format">dd MMMM yyyy</string>
+    <string name="date_input_format">yyyy-MM-dd</string>
+    <string name="rating_format">%.1f/10.0</string>
+    <string name="movie_thumbnail_content_description">Movie thumbnail</string>
+    <string name="sort_by">sort by</string>
+    <string name="popular">Most Popular</string>
+    <string name="top_rated">Top Rated</string>
+    <string name="internet_connection_failed">No INTERNET connection.\nTry again later.</string>
+    <string name="release_date_label">Release Date</string>
+    <string name="rating_label">Rating</string>
 </resources>

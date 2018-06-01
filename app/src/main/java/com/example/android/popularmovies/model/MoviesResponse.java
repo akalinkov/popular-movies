@@ -2,16 +2,14 @@ package com.example.android.popularmovies.model;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+import java.util.ArrayList;
 
-public class PopularMoviesResponse {
+public class MoviesResponse {
 
-    @SerializedName("id")
-    public int id;
     @SerializedName("page")
-    public int page;
+    public int page = 0;
     @SerializedName("totalPages")
-    public short totalPages;
+    public short totalPages = 0;
     @SerializedName("results")
-    public List<Movie> movies;
+    public ArrayList<Movie> movies = new ArrayList<>();
 }
