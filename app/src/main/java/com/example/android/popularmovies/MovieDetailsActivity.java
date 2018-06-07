@@ -23,12 +23,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
     private static final String TAG = MovieDetailsActivity.class.getSimpleName();
 
-//    TextView mTitle;
-//    ImageView mThumbnail;
-//    TextView mReleaseDate;
-//    TextView mRate;
-//    TextView mDescription;
-
     ActivityMovieDetailsBinding mBinding;
 
 
@@ -36,21 +30,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
-        findViews();
         Log.d(TAG, "onCreate: receive Movie details");
         Intent intent = getIntent();
         if (intent.hasExtra(Movie.CURRENT)) {
             Movie movie = intent.getParcelableExtra(Movie.CURRENT);
             bindData(movie);
         }
-    }
-
-    private void findViews() {
-//        mTitle = findViewById(R.id.tv_title);
-//        mThumbnail = findViewById(R.id.iv_thumbnail);
-//        mReleaseDate = findViewById(R.id.tv_release_date);
-//        mRate = findViewById(R.id.tv_rating);
-//        mDescription = findViewById(R.id.tv_description);
     }
 
     private void bindData(Movie movie){

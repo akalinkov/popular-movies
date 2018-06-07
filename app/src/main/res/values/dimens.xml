@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="thumbnail_width">140dp</dimen>
+    <dimen name="details_margin_vertical">40dp</dimen>
+    <dimen name="details_margin_horizontal">16dp</dimen>
+    <dimen name="details_title_padding_horizontal">16dp</dimen>
+    <dimen name="details_title_padding_vertical">16dp</dimen>
+    <dimen name="details_description_margin_horizontal">24dp</dimen>
+</resources>

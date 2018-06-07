@@ -16,22 +16,22 @@
                 android:id="@+id/tv_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="32dp"
-                android:paddingLeft="40dp"
-                android:paddingRight="40dp"
-                android:paddingTop="32dp"
+                android:paddingBottom="@dimen/details_title_padding_vertical"
+                android:paddingLeft="@dimen/details_title_padding_horizontal"
+                android:paddingRight="@dimen/details_title_padding_horizontal"
+                android:paddingTop="@dimen/details_title_padding_vertical"
                 android:theme="@style/MovieTitle"/>
 
             <ImageView
                 android:id="@+id/iv_thumbnail"
-                android:layout_width="140dp"
+                android:layout_width="@dimen/thumbnail_width"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:layout_below="@id/tv_title"
-                android:layout_marginBottom="16dp"
-                android:layout_marginEnd="40dp"
-                android:layout_marginStart="40dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginBottom="@dimen/details_margin_horizontal"
+                android:layout_marginEnd="@dimen/details_margin_vertical"
+                android:layout_marginStart="@dimen/details_margin_vertical"
+                android:layout_marginTop="@dimen/details_margin_horizontal"
                 android:contentDescription="@string/movie_thumbnail_content_description" />
 
             <TextView
@@ -49,7 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv_release_date_label"
-                android:layout_marginEnd="40dp"
+                android:layout_marginEnd="@dimen/details_margin_horizontal"
                 android:layout_toEndOf="@+id/iv_thumbnail"
                 android:theme="@style/Text" />
 
@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/iv_thumbnail"
                 android:layout_below="@id/tv_release_date"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/details_margin_vertical"
                 android:theme="@style/Label"
                 android:text="@string/rating_label" />
 
@@ -69,7 +69,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@id/tv_release_date"
                 android:layout_below="@id/tv_rating_label"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="@dimen/details_margin_vertical"
                 android:theme="@style/Text" />
 
             <TextView
@@ -77,8 +77,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/iv_thumbnail"
-                android:layout_marginEnd="24dp"
-                android:layout_marginStart="24dp"
+                android:layout_marginEnd="@dimen/details_description_margin_horizontal"
+                android:layout_marginStart="@dimen/details_description_margin_horizontal"
                 android:theme="@style/Text" />
         </RelativeLayout>
     </ScrollView>
