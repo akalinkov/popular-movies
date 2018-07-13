@@ -4,10 +4,15 @@
     <string name="date_input_format">yyyy-MM-dd</string>
     <string name="rating_format">%.1f/10.0</string>
     <string name="movie_thumbnail_content_description">Movie thumbnail</string>
-    <string name="sort_by">sort by</string>
+    <string name="movies_display_type_label">display</string>
     <string name="popular">Most Popular</string>
     <string name="top_rated">Top Rated</string>
+    <string name="movies_display_type_favorite">Favorite</string>
     <string name="internet_connection_failed">No INTERNET connection.\nTry again later.</string>
+    <string name="cannot_resolve_intent">"Cannot find an app to play trailers"</string>
     <string name="release_date_label">Release Date</string>
     <string name="rating_label">Rating</string>
+    <string name="label_trailers">"Trailers"</string>
+    <string name="reviews_header_default_text">Reviews (0)</string>
+    <string name="label_author">author</string>
 </resources>

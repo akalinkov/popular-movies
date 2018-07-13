@@ -1,4 +1,4 @@
-package com.example.android.popularmovies.model;
+package com.example.android.popularmovies.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -10,8 +10,11 @@ public class Movie implements Parcelable {
 
     private static final String TAG = Movie.class.getSimpleName();
 
-    public static final String CURRENT = "current_moview";
+    public static final String CURRENT = "current_movie";
+    public static final String FAVORITE = "favorite";
 
+    @SerializedName("id")
+    public int id;
     @SerializedName("original_title")
     public String originalTitle;
     @SerializedName("poster_path")
@@ -25,12 +28,15 @@ public class Movie implements Parcelable {
 
     private Movie(Parcel parcel) {
         Log.d(TAG, "Movie: new object created");
+        id = parcel.readInt();
         originalTitle = parcel.readString();
         posterPath = parcel.readString();
         overview = parcel.readString();
         voteAverage = parcel.readFloat();
         releaseDate = parcel.readString();
     }
+
+    public Movie() {}
 
     @Override
     public int describeContents() {
@@ -40,6 +46,7 @@ public class Movie implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
         Log.d(TAG, "writeToParcel: create new parcel");
+        parcel.writeInt(id);
         parcel.writeString(originalTitle);
         parcel.writeString(posterPath);
         parcel.writeString(overview);

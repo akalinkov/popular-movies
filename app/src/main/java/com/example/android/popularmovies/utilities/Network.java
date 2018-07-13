@@ -4,6 +4,9 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
+import android.widget.Toast;
+
+import com.example.android.popularmovies.R;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,5 +36,11 @@ public class Network {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
+    }
+
+
+    public static void noInternetConnectionToast(Context context) {
+        Log.d(TAG, "noInternetConnectionToast: ");
+        Toast.makeText(context, R.string.internet_connection_failed, Toast.LENGTH_LONG).show();
     }
 }

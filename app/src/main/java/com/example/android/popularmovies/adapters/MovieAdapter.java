@@ -1,4 +1,4 @@
-package com.example.android.popularmovies;
+package com.example.android.popularmovies.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -8,16 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.example.android.popularmovies.model.Movie;
+import com.example.android.popularmovies.R;
+import com.example.android.popularmovies.models.Movie;
 import com.example.android.popularmovies.utilities.TmdbApi;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class MovieRecyclerViewAdapter
-        extends RecyclerView.Adapter<MovieRecyclerViewAdapter.PosterViewHolder> {
+public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.PosterViewHolder> {
 
-    private final String TAG = MovieRecyclerViewAdapter.class.getSimpleName();
+    private final String TAG = MovieAdapter.class.getSimpleName();
 
     private final PosterClickListener mOnClickListener;
     private List<Movie> movies;
@@ -26,7 +26,7 @@ public class MovieRecyclerViewAdapter
         void onPosterClick(Movie currentMovie);
     }
 
-    MovieRecyclerViewAdapter(List<Movie> movies, PosterClickListener listener) {
+    public MovieAdapter(List<Movie> movies, PosterClickListener listener) {
         this.movies = movies;
         this.mOnClickListener = listener;
     }
@@ -35,7 +35,7 @@ public class MovieRecyclerViewAdapter
     @Override
     public PosterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View posterView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.poster, parent, false);
+                .inflate(R.layout.poster_view, parent, false);
         return new PosterViewHolder(posterView);
     }
 
@@ -63,6 +63,7 @@ public class MovieRecyclerViewAdapter
             Picasso.with(itemView.getContext())
                     .load(TmdbApi.buildThumbnailPath(movies.get(position).posterPath))
                     .into(mPoster);
+            mPoster.setContentDescription(movies.get(position).originalTitle);
         }
 
         @Override

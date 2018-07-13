@@ -2,5 +2,7 @@
 <resources>
     <color name="colorAccent">#009999</color>
     <color name="colorCaption">#3F3F3F</color>
-    <color name="colorPrimaryText">#191919</color>
+    <color name="colorDivider">#E0E0E0</color>
+    <color name="colorPrimaryText">#424242</color> <!--#191919-->
+    <color name="colorSecondary">#E0E0E0</color>
 </resources>

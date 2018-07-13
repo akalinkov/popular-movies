@@ -1,13 +1,9 @@
 package com.example.android.popularmovies;
 
-import android.content.Context;
+import android.arch.lifecycle.Observer;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.support.annotation.NonNull;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -15,30 +11,32 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import com.example.android.popularmovies.model.Movie;
-import com.example.android.popularmovies.utilities.Network;
+import com.example.android.popularmovies.adapters.MovieAdapter;
+import com.example.android.popularmovies.database.AppDatabase;
+import com.example.android.popularmovies.models.Movie;
+import com.example.android.popularmovies.repositories.MoviesRepository;
 import com.example.android.popularmovies.utilities.TmdbApi;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
-        implements MovieRecyclerViewAdapter.PosterClickListener,
-        LoaderManager.LoaderCallbacks<List<Movie>> {
+        implements MovieAdapter.PosterClickListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+
+    protected static final String FAVORITE = "favorite";
     private static final String MOVIES_KEY = "movies";
-    public static final String SORT_ORDER_KEY = "sort_order";
-    public static final int GET_MOVIES_LOADER_ID = 11;
+    public static final String DISPLAY_TYPE_KEY = "movies_display_type";
     public static final int POSTER_WIDTH = 500;
 
-    private MovieRecyclerViewAdapter mMovieAdapter;
+    private AppDatabase mDb;
+    private MovieAdapter mMovieAdapter;
     private RecyclerView mPostersList;
 
-    private List<Movie> mMovies;
-    private String mSortOrder;
+    private List<Movie> mMovies = new ArrayList<>();
+    private String mDisplayType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,40 +49,52 @@ public class MainActivity extends AppCompatActivity
         GridLayoutManager layoutManager = new GridLayoutManager(this, spanCount());
         mPostersList.setLayoutManager(layoutManager);
         mPostersList.setHasFixedSize(true);
-        mMovieAdapter = new MovieRecyclerViewAdapter(mMovies, MainActivity.this);
+        mMovieAdapter = new MovieAdapter(mMovies, MainActivity.this);
         mPostersList.setAdapter(mMovieAdapter);
 
-        if (null == mMovies || 0 == mMovies.size()) {
-            updateMoviesList();
-        }
+        mDb = AppDatabase.getsInstance(this.getApplicationContext());
+    }
+
+    @Override
+    protected void onStart() {
+        Log.d(TAG, "onStart: ");
+        super.onStart();
+        updateMoviesList();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        Log.d(TAG, "onSaveInstanceState: ");
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(MOVIES_KEY, (ArrayList<Movie>) mMovies);
-        outState.putString(SORT_ORDER_KEY, mSortOrder);
+        outState.putString(DISPLAY_TYPE_KEY, mDisplayType);
     }
 
     private void setInstanceState(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             Log.d(TAG, "setInstanceState: get saved state");
             mMovies = savedInstanceState.getParcelableArrayList(MOVIES_KEY);
-            mSortOrder = savedInstanceState.getString(SORT_ORDER_KEY);
+            mDisplayType = savedInstanceState.getString(DISPLAY_TYPE_KEY);
         } else {
-            Log.d(TAG, "setInstanceState: initialize mMovies and mSortOrder, restart loader");
-            mMovies = new ArrayList<>();
-            mSortOrder = TmdbApi.POPULAR;
+            Log.d(TAG, "setInstanceState: initialize mDisplayType");
+            mDisplayType = TmdbApi.POPULAR;
         }
     }
 
     private void updateMoviesList() {
-        if (Network.isOnline(this)) {
-            getSupportLoaderManager().restartLoader(GET_MOVIES_LOADER_ID, null, this);
-        } else {
-            Toast.makeText(this, R.string.internet_connection_failed, Toast.LENGTH_LONG).show();
-        }
+        Log.d(TAG, "updateMoviesList: Actively retrieving movies");
+        MoviesRepository.clearMoviesData();
+        MoviesRepository.getMoviesData().observe(this, new Observer<List<Movie>>() {
+            @Override
+            public void onChanged(@Nullable List<Movie> movies) {
+                Log.d(TAG, "onChanged: update movies list");
+                mMovies = movies;
+                mMovieAdapter.replaceMoviesData(mMovies);
+            }
+        });
+        MoviesRepository.startLoadingMovies(this, mDisplayType);
     }
+
 
     private int spanCount() {
         int width = Resources.getSystem().getDisplayMetrics().widthPixels;
@@ -93,7 +103,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.sort_order, menu);
+        getMenuInflater().inflate(R.menu.movies_display_type, menu);
         return true;
     }
 
@@ -102,15 +112,18 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         switch (id) {
             case R.id.popular:
-                mSortOrder = TmdbApi.POPULAR;
+                mDisplayType = TmdbApi.POPULAR;
                 updateMoviesList();
                 return true;
             case R.id.top_rated:
-                mSortOrder = TmdbApi.TOP_RATED;
+                mDisplayType = TmdbApi.TOP_RATED;
+                updateMoviesList();
+                return true;
+            case R.id.favorite:
+                mDisplayType = FAVORITE;
                 updateMoviesList();
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -121,26 +134,4 @@ public class MainActivity extends AppCompatActivity
         MovieDetails.putExtra(Movie.CURRENT, movie);
         startActivity(MovieDetails);
     }
-
-    @Override
-    public Loader<List<Movie>> onCreateLoader(int id, final Bundle args) {
-        return new MoviesLoader(this, mSortOrder);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<List<Movie>> loader, List<Movie> data) {
-        Log.d(TAG, "onLoadFinished: data = " + data);
-        if (null == data && 0 == data.size()) {
-            return;
-        }
-        mMovies = data;
-        mMovieAdapter.replaceMoviesData(mMovies);
-        mPostersList.scrollToPosition(0);
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<List<Movie>> loader) {
-    }
-
-
 }

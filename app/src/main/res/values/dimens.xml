@@ -5,5 +5,9 @@
     <dimen name="details_margin_horizontal">16dp</dimen>
     <dimen name="details_title_padding_horizontal">16dp</dimen>
     <dimen name="details_title_padding_vertical">16dp</dimen>
-    <dimen name="details_description_margin_horizontal">24dp</dimen>
+    <dimen name="details_description_margin">24dp</dimen>
+    <dimen name="details_favorite_icon_margin">16dp</dimen>
+    <dimen name="border_height">1dp</dimen>
+    <dimen name="group_height">54dp</dimen>
+    <dimen name="reviews_padding">8dp</dimen>
 </resources>
